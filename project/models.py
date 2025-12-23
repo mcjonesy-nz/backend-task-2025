@@ -7,11 +7,13 @@ class SentenceInput:
     id: str
     sentence: str
 
+
 @dataclass
 class StandalonePayload:
     survey_title: str
     theme: str
     baseline: List[SentenceInput]
+
 
 @dataclass
 class ComparativePayload:
@@ -20,11 +22,13 @@ class ComparativePayload:
     baseline: List[SentenceInput]
     comparison: List[SentenceInput]
 
+
 @dataclass
 class Sentence:
     id: str
     text: str
     source: str  # "baseline" or "comparison"
+
 
 @dataclass
 class Cluster:
@@ -32,12 +36,14 @@ class Cluster:
     sentences: list[Sentence]
     embedding_centroid: list[float]
 
+
 @dataclass
 class StandaloneClusterResult:
     title: str
     sentiment: str
     sentence_ids: list[str]
     key_insights: list[str]
+
 
 @dataclass
 class ComparativeClusterResult:

@@ -72,4 +72,4 @@ if __name__ == "__main__":
     fake_context = None
 
     response = lambda_handler(fake_event, fake_context)
-    print(response) 
+    print(response)
