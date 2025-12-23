@@ -4,10 +4,12 @@ from project import constants, validation
 
 Payload = dict[str, Any]
 
+
 def make_sentence(id: str = "s1", text: str = "ok"):
     return {"id": id, "sentence": text}
 
-class ValidationTests(unittest.TestCase):   
+
+class ValidationTests(unittest.TestCase):
     def test_valid_standalone_payload_does_not_raise(self):
         payload: Payload = {"surveyTitle": "T", "theme": "account", "baseline": [make_sentence()]}
         # should not raise
@@ -83,4 +85,3 @@ class ValidationTests(unittest.TestCase):
             "comparison": [make_sentence("c1", "fine")],
         }
         validation.validate_payload(payload, mode="comparative")
-

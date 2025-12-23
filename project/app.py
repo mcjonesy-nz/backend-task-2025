@@ -68,7 +68,7 @@ def error_response(message: str, status: int = 400) -> Dict[str, Any]:
 
 if __name__ == "__main__":
     # Simulate a Lambda invocation
-    fake_event = {}
+    fake_event: Dict[str, Any] = {}
     fake_context = None
 
     response = lambda_handler(fake_event, fake_context)

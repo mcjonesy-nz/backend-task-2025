@@ -5,8 +5,10 @@ from project import models, validation, parser
 
 Payload = dict[str, Any]
 
+
 def make_sentence(id: str = "s1", text: str = "ok") -> Dict[str, Any]:
     return {"id": id, "sentence": text}
+
 
 class ParserTests(unittest.TestCase):
     def test__parse_sentences_returns_sentenceinput_list(self):
