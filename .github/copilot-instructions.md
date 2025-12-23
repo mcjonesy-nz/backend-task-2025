@@ -20,6 +20,7 @@ Developer workflows & checks (discoverable / reproducible)
   - When adding Python code, include a minimal `requirements.txt` or `pyproject.toml` and unit tests under `tests/`.
   - When writing tests, use unittest over pytest for compatibility
   - Package for lambda locally with `zip` or use AWS SAM/Serverless Framework for deployment.
+  - When testing locally run the `python3 -m project.app` from the root directory
 
 Test runner (recommended)
 - A small test runner is provided at `scripts/run_tests.py` which ensures the repo root

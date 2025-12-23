@@ -85,3 +85,7 @@ class ValidationTests(unittest.TestCase):
             "comparison": [make_sentence("c1", "fine")],
         }
         validation.validate_payload(payload, mode="comparative")
+
+
+if __name__ == "__main__":
+    unittest.main()
