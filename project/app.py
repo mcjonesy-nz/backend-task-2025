@@ -3,6 +3,7 @@ from typing import Any, Dict
 from pathlib import Path
 
 from project.parser import parse_payload
+from project.preprocessing import preprocess_sentences
 from project.validation import validate_payload, BadRequestError
 from project.loader import load_sentences
 from project.logging import setup_logger
@@ -22,11 +23,11 @@ def lambda_handler(event: Dict[str, Any], context):
 
     sentences = load_sentences(payload)
 
-    # sentences = preprocess_sentences(sentences)
+    processed_sentences = preprocess_sentences(sentences)
 
-    # embeddings = embed_sentences(sentences)
+    # embeddings = embed_sentences(processed_sentences)
 
-    # clusters = cluster_sentences(sentences, embeddings)
+    # clusters = cluster_sentences(processed_sentences, embeddings)
 
     # if mode == "standalone":
     #     results = build_standalone_results(clusters)
@@ -34,8 +35,8 @@ def lambda_handler(event: Dict[str, Any], context):
     #     results = build_comparative_results(clusters)
 
     # Minimal success response for now (higher-level processing not implemented)
-    logger.info(f"Loaded {len(sentences)} sentences successfully")
-    return success_response({"message": "loaded " + str(len(sentences)) + " sentences", "mode": mode})
+    logger.info(f"Loaded {len(processed_sentences)} sentences successfully")
+    return success_response({"message": "loaded " + str(len(processed_sentences)) + " sentences", "mode": mode})
 
 
 def parse_json(event: Dict[str, Any]) -> Dict[str, Any]:

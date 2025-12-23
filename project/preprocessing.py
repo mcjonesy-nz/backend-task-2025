@@ -1,6 +1,6 @@
 import re
 from typing import List
-from project.models import SentenceInput, ProcessedSentence
+from project.models import Sentence, ProcessedSentence
 
 _WHITESPACE_RE = re.compile(r"\s+")
 
@@ -18,7 +18,7 @@ def normalize_text(text: str) -> str:
 # but don't want to treat each as unique as it would overweight clustering
 
 
-def preprocess_sentences(sentences: List[SentenceInput],) -> List[ProcessedSentence]:
+def preprocess_sentences(sentences: List[Sentence],) -> List[ProcessedSentence]:
     """
     Clean and normalize sentences for downstream processing.
 
@@ -30,19 +30,19 @@ def preprocess_sentences(sentences: List[SentenceInput],) -> List[ProcessedSente
     grouped: dict[str, ProcessedSentence] = {}
 
     for sentence in sentences:
-        normalized = normalize_text(sentence.sentence)
+        normalized = normalize_text(sentence.text)
         if not normalized:
             continue
 
         if normalized not in grouped:
             grouped[normalized] = ProcessedSentence(
                 normalized_text=normalized,
-                original_texts=[sentence.sentence],
+                original_texts=[sentence.text],
                 ids=[sentence.id],
             )
         else:
             if sentence.id not in grouped[normalized].ids:
                 grouped[normalized].ids.append(sentence.id)
-            grouped[normalized].original_texts.append(sentence.sentence)
+            grouped[normalized].original_texts.append(sentence.text)
 
     return list(grouped.values())
