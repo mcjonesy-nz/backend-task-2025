@@ -8,6 +8,14 @@ class SentenceInput:
     sentence: str
 
 
+@dataclass(frozen=True)
+class ProcessedSentence:
+    ids: List[str]
+    original_texts: List[str]
+    # not sure if we need to keep original as well
+    normalized_text: str
+
+
 @dataclass
 class StandalonePayload:
     survey_title: str

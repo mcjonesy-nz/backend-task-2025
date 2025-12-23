@@ -21,6 +21,8 @@ Developer workflows & checks (discoverable / reproducible)
   - When writing tests, use unittest over pytest for compatibility
   - Package for lambda locally with `zip` or use AWS SAM/Serverless Framework for deployment.
   - When testing locally run the `python3 -m project.app` from the root directory
+  - Use linting tools like `flake8` or `pylint` for Python code quality checks.
+  - When logging use `logger.info()` or similar instead of print statements.
 
 Test runner (recommended)
 - A small test runner is provided at `scripts/run_tests.py` which ensures the repo root
