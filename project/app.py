@@ -5,12 +5,16 @@ from pathlib import Path
 from project.parser import parse_payload
 from project.validation import validate_payload, BadRequestError
 from project.loader import load_sentences
+from project.logging import setup_logger
+
+
+logger = setup_logger(__name__)
 
 
 def lambda_handler(event: Dict[str, Any], context):
     raw_payload = parse_json(event)
     mode = determine_mode(raw_payload)
-    print(f"Processing mode: {mode}")
+    logger.info(f"Processing mode: {mode}")
 
     validate_payload(raw_payload, mode)
 
@@ -30,6 +34,7 @@ def lambda_handler(event: Dict[str, Any], context):
     #     results = build_comparative_results(clusters)
 
     # Minimal success response for now (higher-level processing not implemented)
+    logger.info(f"Loaded {len(sentences)} sentences successfully")
     return success_response({"message": "loaded " + str(len(sentences)) + " sentences", "mode": mode})
 
 
