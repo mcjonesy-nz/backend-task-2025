@@ -1,19 +1,22 @@
 import json
 from typing import Any, Dict
+from pathlib import Path
 
 from project.parser import parse_payload
 from project.validation import validate_payload, BadRequestError
+from project.loader import load_sentences
 
 
 def lambda_handler(event: Dict[str, Any], context):
     raw_payload = parse_json(event)
     mode = determine_mode(raw_payload)
+    print(f"Processing mode: {mode}")
 
     validate_payload(raw_payload, mode)
 
-    parse_payload(raw_payload)
+    payload = parse_payload(raw_payload)
 
-    # sentences = load_sentences(payload, mode)
+    sentences = load_sentences(payload)
 
     # sentences = preprocess_sentences(sentences)
 
@@ -27,7 +30,7 @@ def lambda_handler(event: Dict[str, Any], context):
     #     results = build_comparative_results(clusters)
 
     # Minimal success response for now (higher-level processing not implemented)
-    return success_response({"message": "payload validated", "mode": mode})
+    return success_response({"message": "loaded " + str(len(sentences)) + " sentences", "mode": mode})
 
 
 def parse_json(event: Dict[str, Any]) -> Dict[str, Any]:
@@ -52,10 +55,10 @@ def parse_json(event: Dict[str, Any]) -> Dict[str, Any]:
 def determine_mode(payload: Dict[str, Any]) -> str:
     """Determine processing mode from payload shape.
 
-    Returns "comparative" if `comparison` key is present, otherwise "standalone".
+    Returns "comparative" if `comparison` list has values in it, otherwise "standalone".
     """
 
-    return "comparative" if "comparison" in payload else "standalone"
+    return "comparative" if "comparison" in payload and payload["comparison"] else "standalone"
 
 
 def success_response(body: Dict[str, Any]) -> Dict[str, Any]:
@@ -68,8 +71,20 @@ def error_response(message: str, status: int = 400) -> Dict[str, Any]:
 
 if __name__ == "__main__":
     # Simulate a Lambda invocation
-    fake_event: Dict[str, Any] = {}
+    # load data/input_example.json for manual testing
+    sample_path = Path(__file__).resolve().parents[1] / "data" / "input_example.json"
     fake_context = None
+    fake_event: Dict[str, Any] = {}
 
-    response = lambda_handler(fake_event, fake_context)
-    print(response)
+    try:
+        if sample_path.exists():
+            with sample_path.open("r") as fh:
+                fake_event = json.load(fh)
+
+        response = lambda_handler(fake_event, fake_context)
+    except BadRequestError as exc:
+        print(error_response(str(exc), 400))
+    except Exception as exc:  # pragma: no cover - safety for manual runs
+        print(error_response(str(exc), 500))
+    else:
+        print(response)
