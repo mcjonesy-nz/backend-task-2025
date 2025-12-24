@@ -17,7 +17,7 @@ class LoaderTests(unittest.TestCase):
         self.assertEqual(len(result), 2)
         self.assertEqual(result[0].id, "b1")
         self.assertEqual(result[0].text, "hello")
-        self.assertEqual(result[0].source, "baseline")
+        self.assertEqual(result[0].source, models.AnalysisMode.STANDALONE)
 
     def test_load_sentences_comparative(self):
         baseline = [make_input("b1", "alpha")]
@@ -34,12 +34,12 @@ class LoaderTests(unittest.TestCase):
         # baseline first
         self.assertEqual(result[0].id, "b1")
         self.assertEqual(result[0].text, "alpha")
-        self.assertEqual(result[0].source, "baseline")
+        self.assertEqual(result[0].source, models.AnalysisMode.STANDALONE)
 
         # comparison entries
         self.assertEqual(result[1].id, "c1")
         self.assertEqual(result[1].text, "beta")
-        self.assertEqual(result[1].source, "comparison")
+        self.assertEqual(result[1].source, models.AnalysisMode.COMPARATIVE)
 
 
 if __name__ == "__main__":

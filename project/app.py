@@ -3,6 +3,7 @@ from typing import Any, Dict
 from pathlib import Path
 
 from project.embeddings import embed_sentence_list
+from project.models import AnalysisMode
 from project.parser import parse_payload
 from project.preprocessing import preprocess_sentences
 from project.validation import validate_payload, BadRequestError
@@ -61,13 +62,13 @@ def parse_json(event: Dict[str, Any]) -> Dict[str, Any]:
     return event
 
 
-def determine_mode(payload: Dict[str, Any]) -> str:
+def determine_mode(payload: Dict[str, Any]) -> AnalysisMode:
     """Determine processing mode from payload shape.
 
     Returns "comparative" if `comparison` list has values in it, otherwise "standalone".
     """
 
-    return "comparative" if "comparison" in payload and payload["comparison"] else "standalone"
+    return AnalysisMode.COMPARATIVE if "comparison" in payload and payload["comparison"] else AnalysisMode.STANDALONE
 
 
 def success_response(body: Dict[str, Any]) -> Dict[str, Any]:
