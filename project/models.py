@@ -61,3 +61,11 @@ class EmbeddedDataset:
 @dataclass
 class SentenceCluster:
     sentences: list[EmbeddedSentence]
+
+
+@dataclass
+class ClusterSummary:
+    title: str
+    sentiment: str
+    sentence_ids: list[str]
+    key_insights: list[str]

@@ -1,12 +1,14 @@
+from dataclasses import asdict
 import json
 from typing import Any, Dict
 from pathlib import Path
 
 from project.clustering import cluster_sentences
 from project.embeddings import embed_sentence_list
-from project.models import AnalysisMode
+from project.models import AnalysisMode, ClusterSummary
 from project.parser import parse_payload
 from project.preprocessing import preprocess_sentences
+from project.summarization import summarize_cluster
 from project.validation import validate_payload, BadRequestError
 from project.loader import load_sentences
 from project.logging import setup_logger
@@ -36,14 +38,16 @@ def lambda_handler(event: Dict[str, Any], context):
     clusters = cluster_sentences(embeddings.baseline)
     logger.info(f"Formed {len(clusters)} clusters from sentences")
 
-    # if mode == "standalone":
-    #     results = build_standalone_results(clusters)
-    # else:
-    #     results = build_comparative_results(clusters)
+    summary_results = list[ClusterSummary]()
+    for cluster in clusters:
+        summary = summarize_cluster(cluster)
+        summary_results.append(summary)
 
-    # Minimal success response for now (higher-level processing not implemented)
+    logger.info(f"Summarized {len(summary_results)} clusters successfully")
 
-    return success_response({"message": "loaded " + str(len(processed_sentences)) + " sentences", "mode": mode})
+    return success_response({
+        "clusters": [asdict(s) for s in summary_results],
+    })
 
 
 def parse_json(event: Dict[str, Any]) -> Dict[str, Any]:
@@ -100,4 +104,6 @@ if __name__ == "__main__":
     except Exception as exc:  # pragma: no cover - safety for manual runs
         print(error_response(str(exc), 500))
     else:
-        print(response)
+        json_response = json.loads(response["body"])
+        json_response = json.dumps(json_response, indent=4)
+        print(json_response)

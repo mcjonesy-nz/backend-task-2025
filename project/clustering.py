@@ -2,13 +2,14 @@ from typing import List
 import numpy as np # type: ignore
 from sklearn.cluster import DBSCAN # type: ignore
 
+from project.constants import MIN_CLUSTER_SIZE, SIMILARITY_THRESHOLD
 from project.models import EmbeddedSentence, SentenceCluster
 
 
 def cluster_sentences(
     embedded_sentences: List[EmbeddedSentence],
-    eps: float = 0.3,
-    min_samples: int = 2,
+    eps: float = SIMILARITY_THRESHOLD,
+    min_samples: int = MIN_CLUSTER_SIZE,
 ) -> List[SentenceCluster]:
     """
     Cluster embedded sentences using cosine similarity.
