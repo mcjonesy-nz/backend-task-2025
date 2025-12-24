@@ -1,6 +1,6 @@
 from typing import List, Union
 
-from project.models import Sentence, StandalonePayload, ComparativePayload
+from project.models import AnalysisMode, Sentence, StandalonePayload, ComparativePayload
 
 
 def load_sentences(payload: Union[StandalonePayload, ComparativePayload]) -> List[Sentence]:
@@ -15,7 +15,7 @@ def load_sentences(payload: Union[StandalonePayload, ComparativePayload]) -> Lis
             Sentence(
                 id=item.id,
                 text=item.sentence,
-                source="baseline"
+                source=AnalysisMode.STANDALONE
             )
         )
 
@@ -26,7 +26,7 @@ def load_sentences(payload: Union[StandalonePayload, ComparativePayload]) -> Lis
                 Sentence(
                     id=item.id,
                     text=item.sentence,
-                    source="comparison"
+                    source=AnalysisMode.COMPARATIVE
                 )
             )
 
