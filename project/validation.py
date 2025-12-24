@@ -1,6 +1,7 @@
 from typing import Any, Dict, List
 
 from project.constants import MAX_SENTENCE_LENGTH, MAX_SENTENCES
+from project.models import AnalysisMode
 
 
 class BadRequestError(Exception):
@@ -8,11 +9,11 @@ class BadRequestError(Exception):
     pass
 
 
-def validate_payload(payload: Dict[str, Any], mode: str) -> None:
+def validate_payload(payload: Dict[str, Any], mode: AnalysisMode) -> None:
     _validate_required_fields(payload)
     _validate_sentences(payload["baseline"], field_name="baseline")
 
-    if mode == "comparative":
+    if mode == AnalysisMode.COMPARATIVE:
         if "comparison" not in payload:
             raise BadRequestError("Missing required field: comparison")
         _validate_sentences(payload["comparison"], field_name="comparison")

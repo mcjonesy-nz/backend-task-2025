@@ -1,7 +1,7 @@
 import unittest
 
 from project.preprocessing import normalize_text, preprocess_sentences
-from project.models import Sentence
+from project.models import AnalysisMode, Sentence
 
 
 class TestPreprocessing(unittest.TestCase):
@@ -11,10 +11,10 @@ class TestPreprocessing(unittest.TestCase):
 
     def test_preprocess_sentences_dedup_and_filter(self):
         inputs = [
-            Sentence(id="1", text="  Foo BAR  ", source="baseline"),
-            Sentence(id="2", text="foo    bar", source="baseline"),
-            Sentence(id="3", text="   ", source="baseline"),
-            Sentence(id="4", text="Unique", source="baseline"),
+            Sentence(id="1", text="  Foo BAR  ", source=AnalysisMode.STANDALONE),
+            Sentence(id="2", text="foo    bar", source=AnalysisMode.STANDALONE),
+            Sentence(id="3", text="   ", source=AnalysisMode.STANDALONE),
+            Sentence(id="4", text="Unique", source=AnalysisMode.STANDALONE),
         ]
 
         processed = preprocess_sentences(inputs)
@@ -33,7 +33,7 @@ class TestPreprocessing(unittest.TestCase):
         self.assertEqual(processed[1].original_texts, ["Unique"])
 
     def test_preprocess_preserves_original_text(self):
-        inp = [Sentence(id="x", text="  Mixed CASE ", source="baseline")]
+        inp = [Sentence(id="x", text="  Mixed CASE ", source=AnalysisMode.STANDALONE)]
         out = preprocess_sentences(inp)
         self.assertEqual(len(out), 1)
         ps = out[0]
