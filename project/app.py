@@ -2,6 +2,7 @@ import json
 from typing import Any, Dict
 from pathlib import Path
 
+from project.clustering import cluster_sentences
 from project.embeddings import embed_sentence_list
 from project.models import AnalysisMode
 from project.parser import parse_payload
@@ -24,14 +25,16 @@ def lambda_handler(event: Dict[str, Any], context):
     payload = parse_payload(raw_payload)
 
     sentences = load_sentences(payload)
+    logger.info(f"Loaded {len(sentences)} sentences successfully")
 
     processed_sentences = preprocess_sentences(sentences)
-    logger.info(f"Loaded {len(processed_sentences)} sentences successfully")
+    logger.info(f"Processed {len(processed_sentences)} sentences successfully")
 
     embeddings = embed_sentence_list(processed_sentences)
     logger.info(f"Generated embeddings for {len(embeddings.baseline)} sentences")
 
-    # clusters = cluster_sentences(processed_sentences, embeddings)
+    clusters = cluster_sentences(embeddings.baseline)
+    logger.info(f"Formed {len(clusters)} clusters from sentences")
 
     # if mode == "standalone":
     #     results = build_standalone_results(clusters)

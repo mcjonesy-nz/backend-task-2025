@@ -59,25 +59,5 @@ class EmbeddedDataset:
 
 
 @dataclass
-class Cluster:
-    cluster_id: int
-    sentences: list[Sentence]
-    embedding_centroid: list[float]
-
-
-@dataclass
-class StandaloneClusterResult:
-    title: str
-    sentiment: str
-    sentence_ids: list[str]
-    key_insights: list[str]
-
-
-@dataclass
-class ComparativeClusterResult:
-    title: str
-    sentiment: str
-    baseline_sentence_ids: list[str]
-    comparison_sentence_ids: list[str]
-    key_similarities: list[str]
-    key_differences: list[str]
+class SentenceCluster:
+    sentences: list[EmbeddedSentence]
